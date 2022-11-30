@@ -19,8 +19,14 @@ for message in messages:
         aantal += 1
         body_title = message.subject
         body_content = message.body
-        print(body_title)
-        print(body_content)
+        if aantal == 1:
+            print(body_title)
+            # print(body_content)
+            lines = body_content.splitlines()
+            print(lines[9])  # bestelbonn
+            for line in lines:
+                if line.startswith("ArtikelID") or line.startswith("Bevestigde leverdatum"):
+                    print(line)
 print(f"There are {aantal} messages found with the right subject")
 # body_content = message.body
 

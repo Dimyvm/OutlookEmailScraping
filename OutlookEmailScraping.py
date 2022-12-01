@@ -15,11 +15,13 @@ print(f"There are {messages.count} messages")
 aantal = 0
 for message in messages:
 
-    if message.subject.startswith('SIEMENS - Update van uw bestelling'):
+    if message.subject.startswith('SIEMENS - Update'):
         aantal += 1
         body_title = message.subject
         body_content = message.body
+        sendDate = message.SentOn.strftime("%d-%m-%y")
         if aantal == 1:
+            print(f"Send date : {sendDate}")
             print(body_title)
             # print(body_content)
             lines = body_content.splitlines()
@@ -28,6 +30,3 @@ for message in messages:
                 if line.startswith("ArtikelID") or line.startswith("Bevestigde leverdatum"):
                     print(line)
 print(f"There are {aantal} messages found with the right subject")
-# body_content = message.body
-
-# print(body_content)

@@ -1,11 +1,25 @@
 import win32com.client
 from datetime import date, timedelta
+import win32ui
+
+# FLOW
+# def read whene it was the last time this script was executed
+# def read outlook emails
+# def filter emails
+# read the data from each filtered email
+# def open excel
+# delete each record where the deliverydate == to the date of Today
+# Write each article and deliverydate in a excel record
+# save and close excel
+# write the date whene this script was executed
+# IF script has a error then send a email
+# if script is executed successfully then show windows messageBox
 
 outlook = win32com.client.dynamic.Dispatch(
     "Outlook.Application").GetNamespace("MAPI")
 
 # "6" refers to the index of a folder - in this case,
-# 5 = Verzonden items
+# "5" = Verzonden items
 inbox = outlook.GetDefaultFolder(6)
 
 
@@ -42,3 +56,4 @@ for message in messagesToday:
                         print(line)
 
 print(f"There are {aantal} messages found with the right subject")
+win32ui.MessageBox("""Successfully executed!""", "Siemens email scraping")

@@ -1,44 +1,31 @@
 import win32com.client
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import win32ui
 from localStorage import *
 
 
-
-# FLOW
 # def read whene it was the last time this script was executed
-lastDateRun()
-# if script is executed successfully then show windows messageBox
+lastRun = lastDateRun()
+print(f'This script was run successfully for the last time on {lastRun}')
+
 # def read outlook emails
-# def filter emails
-# read the data from each filtered email
-# def open excel
-# delete each record where the deliverydate == to the date of Today
-# Write each article and deliverydate in a excel record
-# save and close excel
-# write the date whene this script was executed
-# IF script has a error then send a email
-
-
 outlook = win32com.client.dynamic.Dispatch(
     "Outlook.Application").GetNamespace("MAPI")
-
+inbox = outlook.GetDefaultFolder(6)
 # "6" refers to the index of a folder - in this case,
 # "5" = Verzonden items
-inbox = outlook.GetDefaultFolder(6)
-
-
 messages = inbox.Items  # all mails from inbox
 
+
+# def filter emails
 messages.Sort("[ReceivedTime]", True)  # sort messages on date
+lastRunPlusOne = datetime.strptime(lastRun, "%Y-%m-%d") + timedelta(days=1)
+messagesToday = messages.Restrict(
+    "[ReceivedTime] >= '" + lastRunPlusOne.strftime('%d/%m/%Y %H:%M %p')+"'")
+print(
+    f"There are {messagesToday.count} messages collected from {lastRun} to today")
 
-
-yesterday = date.today() - timedelta(days=1)  # get dat yesteday
-messagesToday = messages.Restrict("[ReceivedTime] >= '" + yesterday.strftime(
-    '%d/%m/%Y %H:%M %p')+"'")  # filter only the messages of today
-
-print(f"There are {messagesToday.count} messages today")
-# message = messages.GetLast()
+# read the data from each filtered email
 aantal = 0
 for message in messagesToday:
 
@@ -49,20 +36,37 @@ for message in messagesToday:
         # sendDate = message.ReceivedTime
         sendDate = message.SentOn.strftime("%d-%m-%y")
 
-        if aantal == 1:
-            print(f"Send date : {sendDate}")
-            print(body_title)
-            # print(body_content)
-            lines = body_content.splitlines()
-            print(lines[9])  # bestelbonn
-            for line in lines:
-                if "Klantartikelnummer " not in line:
-                    if line.startswith("Artikelnummer") or line.startswith("Bevestigde leverdatum"):
-                        print(line)
+        # if aantal == 1:
+        print(f"Send date : {sendDate}")
+        print(body_title)
+        # print(body_content)
+        lines = body_content.splitlines()
+        print(lines[9])  # bestelbonn
+        for line in lines:
+            if "Klantartikelnummer " not in line:
+                if line.startswith("Artikelnummer") or line.startswith("Bevestigde leverdatum"):
+                    print(line)
 
 print(f"There are {aantal} messages found with the right subject")
-win32ui.MessageBox("""Successfully executed!""", "Siemens email scraping")
-
-updateLastDateRun()
 
 
+# def open excel
+
+# delete each record where the deliverydate == to the date of Today
+
+# Write each article and deliverydate in a excel record
+
+# save and close excel
+
+
+# if script is executed successfully then show windows messageBox
+if aantal > 0:
+
+    win32ui.MessageBox("""Successfully executed!""", "Siemens email scraping")
+
+    # write the date whene this script was executed
+    updateLastDateRun()
+
+else:
+    # Else --script has a error then send a email
+    print("script has a error then send a email")

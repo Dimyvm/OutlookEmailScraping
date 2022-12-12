@@ -41,10 +41,10 @@ for message in messagesToday:
         print(body_title)
         # print(body_content)
         lines = body_content.splitlines()
-        print(lines[9])  # bestelbonn
+        # print(lines[9])  # bestelbonn
         for line in lines:
-            if "Klantartikelnummer " not in line:
-                if line.startswith("Artikelnummer") or line.startswith("Bevestigde leverdatum"):
+            if "Klantartikel" not in line:
+                if line.startswith("ArtikelID") or line.startswith("Bevestigde leverdatum") or line.startswith("Bevestigd aantal"):
                     print(line)
 
 print(f"There are {aantal} messages found with the right subject")

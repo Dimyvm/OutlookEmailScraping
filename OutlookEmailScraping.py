@@ -2,6 +2,7 @@ import win32com.client
 from datetime import date, timedelta, datetime
 import win32ui
 from localStorage import *
+from articleClass import *
 
 
 # def read whene it was the last time this script was executed
@@ -41,11 +42,20 @@ for message in messagesToday:
         print(body_title)
         # print(body_content)
         lines = body_content.splitlines()
-        # print(lines[9])  # bestelbonn
+        print(lines[9])  # bestelbon
+
         for line in lines:
             if "Klantartikel" not in line:
-                if line.startswith("ArtikelID") or line.startswith("Bevestigde leverdatum") or line.startswith("Bevestigd aantal"):
-                    print(line)
+                if line.startswith("ArtikelID"):
+                    articleId = line.split()
+                    print(articleId[1])
+                if line.startswith("Bevestigde leverdatum"):
+                    deliveryDate = line.split()
+                    print(deliveryDate[2])
+                if line.startswith("Bevestigd aantal"):
+                    number = line.split()
+                    print(number[2])
+
 
 print(f"There are {aantal} messages found with the right subject")
 

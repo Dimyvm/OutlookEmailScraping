@@ -1,5 +1,5 @@
 
-class article:
+class Article:
     def __init__(self, orderNumber, articleId, number,  deliveryDate):
         self.orderNumber = orderNumber
         self.articleId = articleId

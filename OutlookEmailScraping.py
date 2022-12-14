@@ -2,7 +2,7 @@ import win32com.client
 from datetime import date, timedelta, datetime
 import win32ui
 from localStorage import *
-from articleClass import *
+from articleClass import Article
 
 
 # def read whene it was the last time this script was executed
@@ -28,6 +28,7 @@ print(
 
 # read the data from each filtered email
 aantal = 0
+articleObjectList = []
 for message in messagesToday:
 
     if message.subject.startswith('SIEMENS - Update'):
@@ -42,19 +43,25 @@ for message in messagesToday:
         print(body_title)
         # print(body_content)
         lines = body_content.splitlines()
-        print(lines[9])  # bestelbon
+
+        # line 9 = bestelbon
+        # split on tab and get index 1  --> split on / and get index 0
+        bestelbonnr = lines[9].split('\t')[1].split('/')[0]
+        print(bestelbonnr)
 
         for line in lines:
             if "Klantartikel" not in line:
                 if line.startswith("ArtikelID"):
-                    articleId = line.split()
-                    print(articleId[1])
+                    articleId = line.split()[1]
+                    print(articleId)
                 if line.startswith("Bevestigde leverdatum"):
-                    deliveryDate = line.split()
-                    print(deliveryDate[2])
+                    deliveryDate = line.split()[2]
+                    print(deliveryDate)
                 if line.startswith("Bevestigd aantal"):
-                    number = line.split()
-                    print(number[2])
+                    number = line.split()[2]
+                    print(number)
+            # article = Article(bestelbonnr, articleId, number, deliveryDate)
+            # articleObjectList.append(article)
 
 
 print(f"There are {aantal} messages found with the right subject")

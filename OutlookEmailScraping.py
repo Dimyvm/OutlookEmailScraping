@@ -48,22 +48,30 @@ for message in messagesToday:
         # split on tab and get index 1  --> split on / and get index 0
         bestelbonnr = lines[9].split('\t')[1].split('/')[0]
         print(bestelbonnr)
+        articleId = ""
+        deliveryDate = ""
+        number = ""
 
         for line in lines:
             if "Klantartikel" not in line:
-                if line.startswith("ArtikelID"):
-                    articleId = line.split()[1]
-                    print(articleId)
+                if line.startswith("ArtikelID") or line.startswith("Artikelnummer"):
+                    if line.split()[1] != 'klant':
+                        articleId = line.split()[1]
                 if line.startswith("Bevestigde leverdatum"):
                     deliveryDate = line.split()[2]
-                    print(deliveryDate)
                 if line.startswith("Bevestigd aantal"):
                     number = line.split()[2]
+                    print(articleId)
+                    print(deliveryDate)
                     print(number)
-            # article = Article(bestelbonnr, articleId, number, deliveryDate)
-            # articleObjectList.append(article)
 
+                    articleObjectList.append(
+                        Article(bestelbonnr, articleId, number, deliveryDate))
+                    print("article is added")
+                    print("----------")
 
+length = len(articleObjectList)
+print(f'The length of the list is: {length}')
 print(f"There are {aantal} messages found with the right subject")
 
 

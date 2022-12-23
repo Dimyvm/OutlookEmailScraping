@@ -36,6 +36,8 @@ def main():
                            "Siemens email scraping")
         # write the date whene this script was executed
         updateLastDateRun()
+        error = 'Test emailadress'
+        SendErrorMail(error)
 
 
 def readOutlookMails():
@@ -123,23 +125,23 @@ def readDatafromMail(filteredMessages):
 
 
 def SendErrorMail(error):
-    date = str(datetime.datetime.today()).split()[0]
     outlook = win32com.client.dynamic.Dispatch("Outlook.Application")
     olMailItem = 0x0
     mail = outlook.CreateItem(olMailItem)
-    mail.To = 'dvanmulders@trevi-env.com'
+    emailAdress = mail.Session.CurrentUser.Address  # get mailadress current user
+    # mail.To = 'dvanmulders@trevi-env.com'
+    mail.To = emailAdress
     mail.Subject = 'ERROR - Siemens email scraping'
     mail.BodyFormat = 2  # olFormatHTML
     # mail.Body = f'''Bij het uitvoeren van het script is een error vastgesteld.
     # Hieronder vindt u een overzicht van de error.
     # {error}
     # '''
-    mail.HTMLBody = f'''<h2>Bij het uitvoeren van het script op {date} is een error vastgesteld.</h2>
+    mail.HTMLBody = f'''<h2>Bij het uitvoeren van het script op is een error vastgesteld.</h2>
     <h3>Hieronder vindt u een overzicht van de error</h3>
     <p>{error}</p>'''  # this field is optional
     mail.display()
     mail.Send()
-    outlook.Logoff()
 
 
 main()

@@ -3,6 +3,7 @@ import win32ui
 from datetime import date, timedelta, datetime
 from localStorage import *
 from articleClass import Article
+from excelController import *
 
 
 def main():
@@ -23,6 +24,7 @@ def main():
         print(f'The length of the articlelist is: {articleObjectListLength}')
         print(f"There are {messagesCount} mails found with the right subject")
         # def open excel
+        openExcel()
         # delete each record where the deliverydate == to the date of Today
         # Write each article and deliverydate in a excel record
         # save and close excel
@@ -36,8 +38,6 @@ def main():
                            "Siemens email scraping")
         # write the date whene this script was executed
         updateLastDateRun()
-        error = 'Test emailadress'
-        SendErrorMail(error)
 
 
 def readOutlookMails():

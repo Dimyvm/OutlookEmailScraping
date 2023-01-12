@@ -5,12 +5,13 @@ from localStorage import *
 from articleClass import Article
 from excelController import *
 
-#TO DO 
+# TO DO
 # delete expired items
 # while adding articles check if article is all ready in excel
-    #if yes -- then delete existing row in excel
-    
-    
+# if yes -- then delete existing row in excel
+# Bestelbonnr beter uitfilteren
+
+
 def main():
     try:
         # def read whene it was the last time this script was executed
@@ -20,25 +21,25 @@ def main():
 
         # read outlook emails
         messages = readOutlookMails()
-        
+
         # filter messages
         filteredMessages = filtermails(messages, lastRun)
         messagesCount = len(filteredMessages)
-        
+
         # get data from filtered mails
         articleObjectList = readDatafromMail(filteredMessages)
         articleObjectListLength = len(articleObjectList)
         print(f'The length of the articlelist is: {articleObjectListLength}')
         print(f"There are {messagesCount} mails found with the right subject")
-        
+
         # def open excel
         workbook = openExcel()
-        
+
         # delete each record where the deliverydate == to the date of Today
-        
+
         # Write each article and deliverydate in a excel record
         writeDataToExcel(workbook, articleObjectList)
-        
+
     except:
         error = 'De code is vastgelopen in de algemene Main function'
         SendErrorMail(error)

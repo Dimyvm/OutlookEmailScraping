@@ -98,15 +98,12 @@ def readDatafromMail(filteredMessages):
                 # sendDate = message.ReceivedTime
                 sendDate = message.SentOn.strftime("%d-%m-%y")
 
-                # if aantal == 1:
                 print(f"Send date : {sendDate}")
-                print(body_title)
-                # print(body_content)
+                bestelbonnr = body_title.split("/")[0][-7:]
+                print(f'Bestelbonnr:{bestelbonnr}')
+
                 lines = body_content.splitlines()
 
-                # line 9 = bestelbon
-                # split on tab and get index 1  --> split on / and get index 0
-                bestelbonnr = lines[9].split('\t')[1].split('/')[0]
                 print(bestelbonnr)
                 articleId = ""
                 deliveryDate = ""

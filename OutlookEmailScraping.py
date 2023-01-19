@@ -36,7 +36,8 @@ def main():
         workbook = openExcel()
 
         # delete each record where the deliverydate == to the date of Today
-
+        deleteArticleExpiration(workbook, articleObjectList)
+        
         # Write each article and deliverydate in a excel record
         writeDataToExcel(workbook, articleObjectList)
 

@@ -33,8 +33,32 @@ def readDataFromExcel(workbook, data):
     print(cell_obj.value)
 
 
-def deleteArticleExpiration():
-    print('delete Article expiration')
+# This function has yet to be tested !
+def deleteArticleExpiration(workbook, articleObjectList):
+
+    # Get sheet names
+    sheet = workbook.active
+    index = 1
+    del_rows = []
+
+    for row in sheet.iter_rows():
+
+        orderNumber = row[0].value
+        articleId = row[1].value
+        number = row[2].value
+
+        for articleObject in articleObjectList:
+            if orderNumber == articleObject.orderNumber and articleId == articleObject.articleId and number == articleObject.number:
+                # row matches object
+                del_rows.append(index)
+                break
+
+    for r in reversed(del_rows):
+        sheet.delete_rows(r)
+
+    path = getPath()
+    # Save the file
+    workbook.save(path)
 
 
 def writeDataToExcel(workbook, articleObjectList):

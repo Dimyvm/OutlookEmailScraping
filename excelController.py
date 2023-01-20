@@ -1,5 +1,6 @@
 import os
 import openpyxl
+from datetime import date, datetime
 
 
 def getPath():
@@ -33,12 +34,12 @@ def readDataFromExcel(workbook, data):
     print(cell_obj.value)
 
 
-# This function has yet to be tested !
-def deleteArticleExpiration(workbook, articleObjectList):
+# This function delete all the rows in excel with the same ordernummer and artikelcode that was found in de emails
+def deleteArticleDubbel(workbook, articleObjectList):
 
     # Get sheet names
     sheet = workbook.active
-    index = 1
+    index = 2
     del_rows = []
 
     for row in sheet.iter_rows():
@@ -55,6 +56,39 @@ def deleteArticleExpiration(workbook, articleObjectList):
 
     for r in reversed(del_rows):
         sheet.delete_rows(r)
+
+    path = getPath()
+    # Save the file
+    workbook.save(path)
+
+
+def deleteArticlesRowExpireddate(workbook):
+
+    today = date.today()
+    print(str(today))
+
+    # Get sheet names
+    sheet = workbook.active
+
+    index = 2
+    del_rows = []
+
+    # there is an issue with the first row. because is a tekst and not a Date
+    # So this loop has to start from the second row.
+    for row in sheet.iter_rows():
+
+        deliverDateStr = row[3].value
+        deliverDate = datetime.strptime(
+            deliverDateStr, "%y/%m/%d").strftime("%Y-%m-%d")
+        print(deliverDateStr)
+
+        # if today > deliverDate:
+        #     # If deliverDate is expired with current day
+        #     print('Expired!')
+        #     # del_rows.append(index)
+
+    # for r in reversed(del_rows):
+    #     sheet.delete_rows(r)
 
     path = getPath()
     # Save the file

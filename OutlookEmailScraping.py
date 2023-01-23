@@ -16,8 +16,7 @@ def main():
     try:
         # def read whene it was the last time this script was executed
         lastRun = lastDateRun()
-        print(
-            f'This script was run successfully for the last time on {lastRun}')
+        print(f'This script was run successfully for the last time on {lastRun}')
 
         # read outlook emails
         messages = readOutlookMails()

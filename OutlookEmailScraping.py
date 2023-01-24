@@ -16,7 +16,8 @@ def main():
     try:
         # def read whene it was the last time this script was executed
         lastRun = lastDateRun()
-        print(f'This script was run successfully for the last time on {lastRun}')
+        print(
+            f'This script was run successfully for the last time on {lastRun}')
 
         # read outlook emails
         messages = readOutlookMails()
@@ -34,12 +35,14 @@ def main():
         # def open excel
         workbook = openExcel()
 
-        # delete each record where the deliverydate == to the date of Today
+        # delete each dubble record where the deliverydate == to the date of Today
         deleteArticleDubbel(workbook, articleObjectList)
-        deleteArticlesRowExpireddate(workbook)
 
         # Write each article and deliverydate in a excel record
         writeDataToExcel(workbook, articleObjectList)
+
+        # delete each record where the deliverydate is older to the date of Today
+        deleteArticlesRowExpireddate(workbook)
 
     except:
         error = 'De code is vastgelopen in de algemene Main function'

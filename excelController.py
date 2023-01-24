@@ -39,11 +39,11 @@ def deleteArticleDubbel(workbook, articleObjectList):
 
     # Get sheet names
     sheet = workbook.active
-    index = 2
+    index = 1
     del_rows = []
 
-    for row in sheet.iter_rows():
-
+    for row in sheet.iter_rows(min_row=2):
+        index += 1
         orderNumber = row[0].value
         articleId = row[1].value
         number = row[2].value
@@ -53,7 +53,6 @@ def deleteArticleDubbel(workbook, articleObjectList):
                 # row matches object
                 del_rows.append(index)
                 break
-        index =+ 1
 
     for r in reversed(del_rows):
         sheet.delete_rows(r)
@@ -67,27 +66,26 @@ def deleteArticlesRowExpireddate(workbook):
 
     today = date.today()
     print(str(today))
-    
+
     dateTimeNow = datetime.now()
     print(str(dateTimeNow))
-    
+
     # Get sheet names
     sheet = workbook.active
-    
-    index = 2
+
+    index = 1
     del_rows = []
 
     # there is an issue with the first row. because is a tekst and not a Date
     # So this loop has to start from the second row.
     for row in sheet.iter_rows(min_row=2):
-
+        index += 1
         deliverDateStr = row[3].value
         deliverDate = datetime.strptime(deliverDateStr, "%d/%m/%y")
 
         if dateTimeNow > deliverDate:
             # If deliverDate is expired with current day
             del_rows.append(index)
-        index =+ 1
 
     for r in reversed(del_rows):
         sheet.delete_rows(r)

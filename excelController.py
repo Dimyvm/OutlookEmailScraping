@@ -40,7 +40,8 @@ def deleteArticleDubbel(workbook, articleObjectList):
     # Get sheet names
     sheet = workbook.active
     index = 1
-    del_rows = []
+    del_rowsOne = []
+    del_rowsTwo = []
 
     for row in sheet.iter_rows(min_row=2):
         index += 1
@@ -48,14 +49,39 @@ def deleteArticleDubbel(workbook, articleObjectList):
         articleId = row[1].value
         number = row[2].value
 
+        # check dubbel with the inportinglist
         for articleObject in articleObjectList:
             if orderNumber == articleObject.orderNumber and articleId == articleObject.articleId and number == articleObject.number:
                 # row matches object
-                del_rows.append(index)
+                del_rowsOne.append(index)
                 break
 
-    for r in reversed(del_rows):
+    for r in reversed(del_rowsOne):
         sheet.delete_rows(r)
+        index = 1
+
+    for row in sheet.iter_rows(min_row=2):
+        index += 1
+        orderNumber = row[0].value
+        articleId = row[1].value
+        number = row[2].value
+
+        # check dubbel in excel it self
+        for row in sheet.iter_rows(min_row=index+1):
+
+            orderNumberCheck = row[0].value
+            articleIdCheck = row[1].value
+            numberCheck = row[2].value
+
+        for articleObject in articleObjectList:
+            if orderNumber == orderNumberCheck and articleId == articleIdCheck and number == numberCheck:
+                # row matches object
+                del_rowsTwo.append(index)
+                break
+
+    for r in reversed(del_rowsTwo):
+        sheet.delete_rows(r)
+        index = 1
 
     path = getPath()
     # Save the file

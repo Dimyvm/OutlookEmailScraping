@@ -5,12 +5,6 @@ from localStorage import *
 from articleClass import Article
 from excelController import *
 
-# TO DO
-# delete expired items
-# while adding articles check if article is all ready in excel
-# if yes -- then delete existing row in excel
-# Bestelbonnr beter uitfilteren
-
 
 def main():
     try:

@@ -38,6 +38,8 @@ def main():
         # delete each record where the deliverydate is older to the date of Today
         deleteArticlesRowExpireddate(workbook)
 
+        checkOnDubbel(workbook)
+
     except:
         error = 'De code is vastgelopen in de algemene Main function'
         SendErrorMail(error)

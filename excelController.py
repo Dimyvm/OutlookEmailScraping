@@ -40,8 +40,7 @@ def deleteArticleDubbel(workbook, articleObjectList):
     # Get sheet names
     sheet = workbook.active
     index = 1
-    del_rowsOne = []
-    del_rowsTwo = []
+    del_rows = []
 
     for row in sheet.iter_rows(min_row=2):
         index += 1
@@ -53,13 +52,24 @@ def deleteArticleDubbel(workbook, articleObjectList):
         for articleObject in articleObjectList:
             if orderNumber == articleObject.orderNumber and articleId == articleObject.articleId and number == articleObject.number:
                 # row matches object
-                del_rowsOne.append(index)
+                del_rows.append(index)
                 break
 
-    for r in reversed(del_rowsOne):
+    for r in reversed(del_rows):
         sheet.delete_rows(r)
-        index = 1
+    index = 1
 
+    path = getPath()
+    # Save the file
+    workbook.save(path)
+
+
+def checkOnDubbel(workbook):
+    sheet = workbook.active
+    index = 1
+    del_rows = []
+
+    print("start checking dubbles")
     for row in sheet.iter_rows(min_row=2):
         index += 1
         orderNumber = row[0].value
@@ -73,16 +83,16 @@ def deleteArticleDubbel(workbook, articleObjectList):
             articleIdCheck = row[1].value
             numberCheck = row[2].value
 
-        for articleObject in articleObjectList:
             if orderNumber == orderNumberCheck and articleId == articleIdCheck and number == numberCheck:
                 # row matches object
-                del_rowsTwo.append(index)
+                del_rows.append(index)
                 break
 
-    for r in reversed(del_rowsTwo):
+    for r in reversed(del_rows):
         sheet.delete_rows(r)
-        index = 1
+    index = 1
 
+    print("end checking dubbles")
     path = getPath()
     # Save the file
     workbook.save(path)

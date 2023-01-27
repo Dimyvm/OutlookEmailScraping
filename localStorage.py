@@ -1,11 +1,22 @@
+import os
 import json
 from datetime import date
 
 
+def getPath():
+
+    # Give the location of the file
+    osPath = os.getcwd()  # get path of this directory
+    file = '\data.json'  # filename
+    return osPath+file
+
+
 def lastDateRun():
 
+    path = getPath()
+
     # Opening JSON file
-    with open('data.json', 'r') as openfile:
+    with open(path, 'r') as openfile:
 
         # Reading from json file
         jsonObject = json.load(openfile)
@@ -14,7 +25,10 @@ def lastDateRun():
 
 
 def updateLastDateRun():
+
+    path = getPath()
     today = date.today()
+
     data = {
         "data": {
             "lastRun": str(today)
@@ -22,5 +36,5 @@ def updateLastDateRun():
     }
 
     json_string = json.dumps(data)
-    with open('data.json', 'w', encoding='utf-8') as outfile:
+    with open(path, 'w', encoding='utf-8') as outfile:
         outfile.write(json_string)

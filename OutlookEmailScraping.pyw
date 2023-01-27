@@ -89,22 +89,22 @@ def readDatafromMail(filteredMessages):
         # read the data from each filtered email
         aantal = 0
         articleObjectList = []
+
         for message in filteredMessages:
 
             if message.subject.startswith('SIEMENS - Update'):
                 aantal += 1
                 body_title = message.subject
                 body_content = message.body
-                # sendDate = message.ReceivedTime
                 sendDate = message.SentOn.strftime("%d-%m-%y")
 
-                print(f"Send date : {sendDate}")
+                # print(f"Send date : {sendDate}")
                 bestelbonnr = body_title.split("/")[0][-7:]
-                print(f'Bestelbonnr:{bestelbonnr}')
+                # print(f'Bestelbonnr:{bestelbonnr}')
 
                 lines = body_content.splitlines()
 
-                print(bestelbonnr)
+                # print(bestelbonnr)
                 articleId = ""
                 deliveryDate = ""
                 number = ""
@@ -118,14 +118,14 @@ def readDatafromMail(filteredMessages):
                             deliveryDate = line.split()[2]
                         if line.startswith("Bevestigd aantal"):
                             number = line.split()[2]
-                            print(articleId)
-                            print(deliveryDate)
-                            print(number)
+                            # print(articleId)
+                            # print(deliveryDate)
+                            # print(number)
 
                             articleObjectList.append(
                                 Article(bestelbonnr, articleId, number, deliveryDate))
-                            print("article is added")
-                            print("----------")
+                            # print("article is added")
+                            # print("----------")
         return articleObjectList
 
     except:

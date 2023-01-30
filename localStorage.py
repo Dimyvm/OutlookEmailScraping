@@ -29,7 +29,6 @@ def lastDateRun():
         title = 'De code is vastgelopen in de lastDateRun functie'
         error = e
         SendErrorMail(title, error)
-        input()
 
 
 def updateLastDateRun():
@@ -52,4 +51,3 @@ def updateLastDateRun():
         title = 'De code is vastgelopen in de updateLastDateRun functie'
         error = e
         SendErrorMail(title, error)
-        input()

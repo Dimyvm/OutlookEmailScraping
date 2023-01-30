@@ -150,11 +150,13 @@ def deleteArticlesRowExpireddate(workbook):
         for row in sheet.iter_rows(min_row=2):
             index += 1
             deliverDateStr = row[3].value
-            deliverDate = datetime.strptime(deliverDateStr, "%d/%m/%y")
 
-            if dateTimeNow > deliverDate:
-                # If deliverDate is expired with current day
-                del_rows.append(index)
+            if not deliverDateStr == "-":
+                deliverDate = datetime.strptime(deliverDateStr, "%d/%m/%y")
+
+                if dateTimeNow > deliverDate:
+                    # If deliverDate is expired with current day
+                    del_rows.append(index)
 
         for r in reversed(del_rows):
             sheet.delete_rows(r)

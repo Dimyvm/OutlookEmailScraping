@@ -4,6 +4,7 @@ from datetime import date, timedelta, datetime
 from localStorage import *
 from articleClass import Article
 from excelController import *
+from errorHandler import *
 
 
 def main():
@@ -40,9 +41,12 @@ def main():
 
         checkOnDubbel(workbook)
 
-    except:
-        error = 'De code is vastgelopen in de algemene Main function'
-        SendErrorMail(error)
+    except Exception as e:
+
+        title = 'De code is vastgelopen in de Main functie'
+        error = e
+        SendErrorMail(title, error)
+        input()
 
     else:
         # if script is executed successfully then show windows messageBox
@@ -62,9 +66,11 @@ def readOutlookMails():
         # "5" = Verzonden items
         messages = inbox.Items
         return messages
-    except:
-        error = 'De code is vastgelopen bij het verzamelen van alle mails'
-        SendErrorMail(error)
+
+    except Exception as e:
+        title = 'De code is vastgelopen in de readOutlookMails functie'
+        error = e
+        SendErrorMail(title, error)
 
 
 def filtermails(messages, lastRun):
@@ -79,9 +85,10 @@ def filtermails(messages, lastRun):
             f"There are {filteredMessages.count} messages collected from {lastRun} to today")
         return filteredMessages
 
-    except:
-        error = 'De code is vastgelopen in het filteren van de mails'
-        SendErrorMail(error)
+    except Exception as e:
+        title = 'De code is vastgelopen in de filtermails functie'
+        error = e
+        SendErrorMail(title, error)
 
 
 def readDatafromMail(filteredMessages):
@@ -89,22 +96,22 @@ def readDatafromMail(filteredMessages):
         # read the data from each filtered email
         aantal = 0
         articleObjectList = []
-
+        print("voor loop")
         for message in filteredMessages:
-
+            print("loop is gestart")
             if message.subject.startswith('SIEMENS - Update'):
                 aantal += 1
                 body_title = message.subject
                 body_content = message.body
                 sendDate = message.SentOn.strftime("%d-%m-%y")
 
-                # print(f"Send date : {sendDate}")
+                print(f"Send date : {sendDate}")
                 bestelbonnr = body_title.split("/")[0][-7:]
-                # print(f'Bestelbonnr:{bestelbonnr}')
+                print(f'Bestelbonnr:{bestelbonnr}')
 
                 lines = body_content.splitlines()
 
-                # print(bestelbonnr)
+                print(bestelbonnr)
                 articleId = ""
                 deliveryDate = ""
                 number = ""
@@ -118,39 +125,38 @@ def readDatafromMail(filteredMessages):
                             deliveryDate = line.split()[2]
                         if line.startswith("Bevestigd aantal"):
                             number = line.split()[2]
-                            # print(articleId)
-                            # print(deliveryDate)
-                            # print(number)
+                            print(articleId)
+                            print(deliveryDate)
+                            print(number)
 
                             articleObjectList.append(
                                 Article(bestelbonnr, articleId, number, deliveryDate))
-                            # print("article is added")
-                            # print("----------")
+                            print("article is added")
+                            print("----------")
         return articleObjectList
 
-    except:
-        error = 'De code is vastgelopen bij het uitlezen van de data uit de mails'
-        SendErrorMail(error)
+    except Exception as e:
+        title = 'De code is vastgelopen in de readDatafromMail functie'
+        error = e
+        SendErrorMail(title, error)
 
 
-def SendErrorMail(error):
-    outlook = win32com.client.dynamic.Dispatch("Outlook.Application")
-    olMailItem = 0x0
-    mail = outlook.CreateItem(olMailItem)
-    emailAdress = mail.Session.CurrentUser.Address  # get mailadress current user
-    # mail.To = 'dvanmulders@trevi-env.com'
-    mail.To = emailAdress
-    mail.Subject = 'ERROR - Siemens email scraping'
-    mail.BodyFormat = 2  # olFormatHTML
-    # mail.Body = f'''Bij het uitvoeren van het script is een error vastgesteld.
-    # Hieronder vindt u een overzicht van de error.
-    # {error}
-    # '''
-    mail.HTMLBody = f'''<h2>Bij het uitvoeren van het script op is een error vastgesteld.</h2>
-    <h3>Hieronder vindt u een overzicht van de error</h3>
-    <p>{error}</p>'''  # this field is optional
-    mail.display()
-    mail.Send()
+# def SendErrorMail(title, error):
+#     outlook = win32com.client.dynamic.Dispatch("Outlook.Application")
+#     olMailItem = 0x0
+#     mail = outlook.CreateItem(olMailItem)
+#     emailAdress = mail.Session.CurrentUser.Address  # get mailadress current user
+#     # mail.To = 'dvanmulders@trevi-env.com'
+#     mail.To = emailAdress
+#     mail.Subject = 'ERROR - Siemens email scraping'
+#     mail.BodyFormat = 2  # olFormatHTML
+
+#     mail.HTMLBody = f'''<h2>Bij het uitvoeren van het script op is een error vastgesteld.</h2>
+#     <h3>Hieronder vindt u een overzicht van de error</h3>
+#     <h4>{title}</h4>
+#     <p>{error}</p>'''  # this field is optional
+#     mail.display()
+#     mail.Send()
 
 
 main()

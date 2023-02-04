@@ -95,7 +95,6 @@ def checkOnDubbel(workbook):
         index = 1
         del_rows = []
 
-        print("start checking dubbles")
         for row in sheet.iter_rows(min_row=2):
             index += 1
             orderNumber = row[0].value
@@ -118,7 +117,6 @@ def checkOnDubbel(workbook):
             sheet.delete_rows(r)
         index = 1
 
-        print("end checking dubbles")
         path = getPath()
         # Save the file
         workbook.save(path)
@@ -134,10 +132,8 @@ def checkOnDubbel(workbook):
 def deleteArticlesRowExpireddate(workbook):
     try:
         today = date.today()
-        print(str(today))
 
         dateTimeNow = datetime.now()
-        print(str(dateTimeNow))
 
         # Get sheet names
         sheet = workbook.active

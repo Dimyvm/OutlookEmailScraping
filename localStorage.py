@@ -8,7 +8,7 @@ def getPath():
 
     # Give the location of the file
     osPath = os.getcwd()  # get path of this directory
-    file = '\data.json'  # filename
+    file = '\data.json'
     return osPath+file
 
 
@@ -33,6 +33,7 @@ def lastDateRun():
 
 def updateLastDateRun():
     try:
+
         path = getPath()
         today = date.today()
 
